@@ -6,6 +6,18 @@ districts.each do |number, region|
   District.create(number: number,region: region)
 end
 
-CSV.foreach("path to file") do |row|
-  Company.create(dbe: row[0],sbe: "",name: row[1],street: row[2]+row[3],city: row[4],state: row[5],zip: row[6],contact: row[8],email: row[7],phone: row[9]+"-"+row[10])
+csv_text = File.read(Rails.root.join('lib', 'seeds', 'company_db1.csv'))
+csv = CSV.parse(csv_text, :skip_blanks => true, :encoding => 'ISO-8859-1')
+csv.each do |row|
+  company = Company.new
+  company.dbe = row[0]||"n/a"
+  company.name = row[1]||"n/a"
+  company.street = "#{row[2]} #{row[3]}"||"n/a"
+  company.city = row[4]||"n/a"
+  company.state = row[5]||"n/a"
+  company.zip = row[6]||"n/a"
+  company.contact = row[8]||"n/a"
+  company.email = row[7]||"n/a"
+  company.phone = "#{row[9]}-#{row[10]}"||"n/a"
+  company.save
 end
